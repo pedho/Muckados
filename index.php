@@ -18,6 +18,11 @@ try {
 	
 	if ($con) {
 		echo "deu certo";
+        $comando1 = $con->query("SELECT * FROM produto");
+		
+		while ($var_linha = $comando1->fetch()) {
+			echo $var_linha[1] . " " . $var_linha[2] . " " . $var_linha[3] . " " . "<img src="$var_linha[4]">" . "<br/>";	
+		}
 	}
 } catch (PDOException $e) {
 	echo 'DEU ERRADO!!!' . $e;
@@ -53,11 +58,11 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "save" && $nome != "") {
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Agenda de contatos</title>
+        <title>Muckados</title>
     </head>
     <body>
         <form action="?act=save" method="POST" name="form1" >
-          <h1>Site de produtos de academia</h1>
+          <h1>Adicionar produtos</h1>
           <hr>
           <input type="hidden" name="id" <?php
             if (isset($id) && $id != null || $id != "") {
@@ -95,6 +100,6 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "save" && $nome != "") {
          <input type="submit" value="Salvar" />
          <input type="reset" value="Novo" />
          <hr>
-       </form>
+
     </body>
 </html>
