@@ -48,7 +48,30 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "save_prod" && $nome != "") {
         echo "Erro: " . $erro->getMessage();
     }
 }
-
+if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "att_prod" && $nome != "") {
+    try {
+        $stmt = $con->prepare("UPDATE INTO Produto (nome, tipo, legenda) VALUES (?, ?, ?)");
+        $stmt->bindParam(1, $nome);
+        $stmt->bindParam(2, $tipo);
+        $stmt->bindParam(3, $legenda);
+         
+        if ($stmt->execute()) {
+            if ($stmt->rowCount() > 0) {
+                echo "Dados cadastrados com sucesso!";
+                $id = null;
+                $nome = null;
+                $tipo = null;
+                $legenda = null;
+            } else {
+                echo "Erro ao tentar efetivar cadastro";
+            }
+        } else {
+               throw new PDOException("Erro: Não foi possível executar a declaração sql");
+        }
+    } catch (PDOException $erro) {
+        echo "Erro: " . $erro->getMessage();
+    }
+}
 ?>
 
 <html>
@@ -57,7 +80,7 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "save_prod" && $nome != "") {
         <title>Muckados</title>
     </head>
     <body>
-        <form action="?act=save_prod" method="POST" name="form1" >
+        <form action="?act=save_prod" method="POST" name="form1">
           <h1>Adicionar produtos</h1>
           <hr>
           <input type="hidden" name="id" <?php
@@ -93,9 +116,10 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "save_prod" && $nome != "") {
          $comando1 = $con->query("SELECT * FROM produto");
          
          while ($var_linha = $comando1->fetch()) {
-             echo $var_linha[1] . " " . $var_linha[2] . "<br/>";	
+             echo $var_linha[1] . " " . $var_linha[2] . $var_linha[3] . "" . "<br/>";	
          }	
          ?>
+         
 
     </body>
 </html>

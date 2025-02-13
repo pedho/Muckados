@@ -51,6 +51,29 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "save_vest" && $tipo != "") {
         echo "Erro: " . $erro->getMessage();
     }
 }
+if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "delete" && $id != "") {
+    try {
+        $stmt = $con->prepare("DELETE FROM Vestuario WHERE COD = ?");
+        $stmt->bindParam(1, $id);
+         
+        if ($stmt->execute()) {
+            if ($stmt->rowCount() > 0) {
+                echo "Dados apagados com sucesso!";
+                $id = null;
+                $tipo = null;
+                $marca = null;
+                $cor = null;
+                $legenda = null;
+            } else {
+                echo "Erro ao tentar deletar";
+            }
+        } else {
+               throw new PDOException("Erro: Não foi possível executar a declaração sql");
+        }
+    } catch (PDOException $erro) {
+        echo "Erro: " . $erro->getMessage();
+    }
+}
 ?>
 
 <html>
@@ -105,7 +128,7 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "save_vest" && $tipo != "") {
 
  
          while ($var_linha = $comando2->fetch()) {
-             echo $var_linha[1] . " " . $var_linha[2] . "<br/>";	
+             echo $var_linha[1] . " " . $var_linha[2] . "<a href='delete'>att</a>" . "<br/>";	
          }?>
 
     </body>
