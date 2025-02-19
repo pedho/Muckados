@@ -54,11 +54,12 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "save_prod" && $nome != "") {
 }
 if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "att_prod" && $nome != "") {
     try {
-        $stmt = $con->prepare("UPDATE INTO Produto (nome, tipo, legenda, quantidade) VALUES (?, ?, ?, ?)");
+        $stmt = $con->prepare("UPDATE Produto set nome = ?, tipo = ?, legenda = ?, quantidade = ? where id = ?");
         $stmt->bindParam(1, $nome);
         $stmt->bindParam(2, $tipo);
         $stmt->bindParam(3, $legenda);
         $stmt->bindParam(4, $quantidade);
+        $stmt->bindParam(5, $id);
          
         if ($stmt->execute()) {
             if ($stmt->rowCount() > 0) {
@@ -115,7 +116,9 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "att_prod" && $nome != "") {
                 echo "value=\"{$legenda}\"";
             }
             ?>/>
-        <input type="text" name="quantidade" <?php
+           <br/>
+           Quantidade:
+           <input type="text" name="quantidade" <?php
             if (isset($quantidade) && $quantidade != null || $quantidade != "") {
                 echo "value=\"{$quantidade}\"";
             }
@@ -128,8 +131,21 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "att_prod" && $nome != "") {
          $comando1 = $con->query("SELECT * FROM produto");
          
          while ($var_linha = $comando1->fetch()) {
-             echo $var_linha[1] . " " . $var_linha[2] . $var_linha[3] . "" . "<br/>";	
-         }	
+            echo "Nome: " . $var_linha['nome'] . "<br/>";
+            echo "Tipo: " . $var_linha['tipo'] . "<br/>";
+            echo "Legenda: " . $var_linha['legenda'] . "<br/>";
+            echo "Quantidade: " . $var_linha['quantidade'] . "<br/>";
+            
+
+            echo "<form action=\"?act=att_prod\" method=\"POST\">
+                   <input type=\"hidden\" name=\"id\" value=\"" . $var_linha['id'] . "\" />
+                   Nome: <input type=\"text\" name=\"nome\" value=\"" . $var_linha['nome'] . "\" /><br/>
+                   Tipo: <input type=\"text\" name=\"tipo\" value=\"" . $var_linha['tipo'] . "\" /><br/>
+                   Legenda: <input type=\"text\" name=\"legenda\" value=\"" . $var_linha['legenda'] . "\" /><br/>
+                   Quantidade: <input type=\"text\" name=\"quantidade\" value=\"" . $var_linha['quantidade'] . "\" /><br/>
+                   <input type=\"submit\" value=\"Atualizar\" />
+                   </form><hr/>";
+        }
          ?>
          
 
