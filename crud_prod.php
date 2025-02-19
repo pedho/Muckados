@@ -5,6 +5,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nome = (isset($_POST["nome"]) && $_POST["nome"] != null) ? $_POST["nome"] : "";
     $tipo = (isset($_POST["tipo"]) && $_POST["tipo"] != null) ? $_POST["tipo"] : NULL;
     $legenda = (isset($_POST["legenda"]) && $_POST["legenda"] != null) ? $_POST["legenda"] : "";
+    $quantidade = (isset($_POST["quantidade"]) && $_POST["quantidade"] != null) ? $_POST["quantidade"] : "";
     
 } else if (!isset($id)) {
 
@@ -12,10 +13,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nome = NULL;
     $tipo = NULL;
     $legenda = NULL;
+    $quantidade = NULL;
     
 }
     try {
-        $con = new PDO('pgsql:host=127.0.0.1;port=5432;dbname=postgres', 'postgres', 'pabd');
+        $con = new PDO('pgsql:host=localhost;port=5432;dbname=postgres', 'postgres', 'pabd');
         
         if ($con) {
             echo "deu certo";
@@ -26,10 +28,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "save_prod" && $nome != "") {
     try {
-        $stmt = $con->prepare("INSERT INTO Produto (nome, tipo, legenda) VALUES (?, ?, ?)");
+        $stmt = $con->prepare("INSERT INTO Produto (nome, tipo, legenda, quantidade) VALUES (?, ?, ?, ?)");
         $stmt->bindParam(1, $nome);
         $stmt->bindParam(2, $tipo);
         $stmt->bindParam(3, $legenda);
+        $stmt->bindParam(4, $quantidade);
          
         if ($stmt->execute()) {
             if ($stmt->rowCount() > 0) {
@@ -38,6 +41,7 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "save_prod" && $nome != "") {
                 $nome = null;
                 $tipo = null;
                 $legenda = null;
+                $quantidade = null;
             } else {
                 echo "Erro ao tentar efetivar cadastro";
             }
@@ -50,10 +54,11 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "save_prod" && $nome != "") {
 }
 if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "att_prod" && $nome != "") {
     try {
-        $stmt = $con->prepare("UPDATE INTO Produto (nome, tipo, legenda) VALUES (?, ?, ?)");
+        $stmt = $con->prepare("UPDATE INTO Produto (nome, tipo, legenda, quantidade) VALUES (?, ?, ?, ?)");
         $stmt->bindParam(1, $nome);
         $stmt->bindParam(2, $tipo);
         $stmt->bindParam(3, $legenda);
+        $stmt->bindParam(4, $quantidade);
          
         if ($stmt->execute()) {
             if ($stmt->rowCount() > 0) {
@@ -62,6 +67,8 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "att_prod" && $nome != "") {
                 $nome = null;
                 $tipo = null;
                 $legenda = null;
+                $quantidade = null;
+
             } else {
                 echo "Erro ao tentar efetivar cadastro";
             }
@@ -106,6 +113,11 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "att_prod" && $nome != "") {
           <input type="text" name="legenda" <?php
             if (isset($legenda) && $legenda != null || $legenda != "") {
                 echo "value=\"{$legenda}\"";
+            }
+            ?>/>
+        <input type="text" name="quantidade" <?php
+            if (isset($quantidade) && $quantidade != null || $quantidade != "") {
+                echo "value=\"{$quantidade}\"";
             }
             ?>/>
          <br/>

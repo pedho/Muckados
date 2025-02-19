@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $legenda = NULL;
 }
 try {
-	$con = new PDO('pgsql:host=127.0.0.1;port=5432;dbname=postgres', 'postgres', 'pabd');
+	$con = new PDO('pgsql:host=localhost;port=5432;dbname=postgres', 'postgres', 'pabd');
 	
 	if ($con) {
 		echo "deu certo";

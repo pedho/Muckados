@@ -1,0 +1,18 @@
+CREATE TABLE Vestuario(
+	id serial,
+	tipo varchar(300),
+	marca varchar(100),
+	cor varchar(100),
+	legenda varchar(500),
+	quantidade int,
+CONSTRAINT pk_vest PRIMARY KEY (id)
+)
+
+CREATE TABLE Produto(
+	id serial,
+	nome varchar(300),
+	tipo varchar(100),
+	legenda varchar(500),
+	quantidade int,
+CONSTRAINT pk_prod PRIMARY KEY (id)
+)
