@@ -1,18 +1,33 @@
+CREATE TABLE Login(
+	usuario varchar,
+	setor varchar,
+	senha int,
+CONSTRAINT pk_usuario PRIMARY KEY (usuario)
+);
+
 CREATE TABLE Vestuario(
 	id serial,
+	usuario varchar(100),
 	tipo varchar(300),
 	marca varchar(100),
 	cor varchar(100),
 	legenda varchar(500),
 	quantidade int,
-CONSTRAINT pk_vest PRIMARY KEY (id)
-)
+	preço varchar,
+CONSTRAINT pk_vest PRIMARY KEY (id),
+CONSTRAINT fk_vest FOREIGN KEY (usuario) references Login(usuario)
+);
 
 CREATE TABLE Produto(
 	id serial,
 	nome varchar(300),
+	usuario varchar(100),
 	tipo varchar(100),
+	marca varchar(100),
+	sabor varchar(100),
 	legenda varchar(500),
 	quantidade int,
-CONSTRAINT pk_prod PRIMARY KEY (id)
+	preço varchar,
+CONSTRAINT pk_prod PRIMARY KEY (id),
+CONSTRAINT fk_vest FOREIGN KEY (usuario) references Login(usuario)
 )

@@ -6,6 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $marca = (isset($_POST["marca"]) && $_POST["marca"] != null) ? $_POST["marca"] : "";
     $cor = (isset($_POST["cor"]) && $_POST["cor"] != null) ? $_POST["cor"] : "";
     $legenda = (isset($_POST["legenda"]) && $_POST["legenda"] != null) ? $_POST["legenda"] : "";
+    $quantidade = (isset($_POST["quantidade"]) && $_POST["quantidade"] != null) ? $_POST["quantidade"] : "";
     
 } else if (!isset($id)) {
     
@@ -14,6 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $marca = NULL;
     $cor = NULL;
     $legenda = NULL;
+    $quantidade = NULL;
 }
 try {
 	$con = new PDO('pgsql:host=localhost;port=5432;dbname=postgres', 'postgres', 'pabd');
@@ -124,12 +126,20 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "delete" && $id != "") {
          <hr>
 
          <?php
-         $comando2 = $con->query("SELECT * FROM vestuario");
-
- 
-         while ($var_linha = $comando2->fetch()) {
-             echo $var_linha[1] . " " . $var_linha[2] . "<a href='delete'>att</a>" . "<br/>";	
-         }?>
+         $comando1 = $con->query("SELECT * FROM produto");
+         
+         while ($var_linha = $comando1->fetch()) {
+            
+            echo "<form action=\"?act=att_prod\" method=\"POST\">
+                   <input type=\"hidden\" name=\"id\" value=\"" . $var_linha['id'] . "\" />
+                   Tipo: <input type=\"text\" name=\"tipo\" value=\"" . $var_linha['tipo'] . "\" /><br/>
+                   Marca: <input type=\"text\" name=\"marca\" value=\"" . $var_linha['marca'] . "\" /><br/>
+                   Legenda: <input type=\"text\" name=\"legenda\" value=\"" . $var_linha['legenda'] . "\" /><br/>
+                   Quantidade: <input type=\"text\" name=\"quantidade\" value=\"" . $var_linha['quantidade'] . "\" /><br/>
+                   <input type=\"submit\" value=\"Atualizar\" />
+                   </form><hr/>";
+        }
+        ?>
 
     </body>
 </html>
