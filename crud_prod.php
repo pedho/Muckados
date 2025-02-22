@@ -1,13 +1,14 @@
 <?php
 // session_start();
 //nessa pg
-//if (!isset($_SESSION["username"])) {
-//    exit();
-//} else {
-//    $username = $_SESSION["username"]
-//}
 // para deslogar unset($_SESSION["username"])
-session_start();
+session_start(); // INICIA A SESSÃO
+if (!isset($_SESSION["username"])) {
+    exit("Usuário não autenticado."); // Mensagem para debugging
+} else {
+    $username = $_SESSION["username"];
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $id = (isset($_POST["id"]) && $_POST["id"] != null) ? $_POST["id"] : "";
@@ -44,9 +45,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
 if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "save_prod" && $nome != "") {
     try {
-        $stmt = $con->prepare("INSERT INTO Produto (usuario, nome, tipo, marca, sabor, legenda, quantidade, preço) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bindParam(1, $username);
-        $stmt->bindParam(2, $nome);
+        $stmt = $con->prepare("INSERT INTO Produto (nome, usuario, tipo, marca, sabor, legenda, quantidade, preço) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bindParam(1, $nome);
+        $stmt->bindParam(2, $username);
         $stmt->bindParam(3, $tipo);
         $stmt->bindParam(4, $marca);
         $stmt->bindParam(5, $sabor);
@@ -57,14 +58,14 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "save_prod" && $nome != "") {
         if ($stmt->execute()) {
             if ($stmt->rowCount() > 0) {
                 echo "Dados cadastrados com sucesso!";
-                $id = NULL;
-                $nome = NULL;
-                $tipo = NULL;
-                $marca = NULL;
-                $sabor = NULL;
-                $legenda = NULL;
-                $quantidade = NULL;
-                $preço = NULL;
+                $id = null;
+                $nome = null;
+                $tipo = null;
+                $marca = null;
+                $sabor = null;
+                $legenda = null;
+                $quantidade = null;
+                $preço = null;
             } else {
                 echo "Erro ao tentar efetivar cadastro";
             }
@@ -110,6 +111,23 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "att_prod" && $nome != "") {
         echo "Erro: " . $erro->getMessage();
     }
 }
+if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "del_prod" && isset($_POST["id"])) {
+    $id = $_POST["id"];
+    try {
+        $stmt = $con->prepare("DELETE FROM Produto WHERE id = ?");
+        $stmt->bindParam(1, $id);
+        if ($stmt->execute()) {
+            if ($stmt->rowCount() > 0) {
+                echo "Produto deletado com sucesso!";
+                $id = NULL;
+            }
+        } else {
+            throw new PDOException("Erro: Não foi possível executar a declaração sql");
+        }
+    }catch (PDOException $erro) {
+        echo "Erro: " . $erro->getMessage();
+    }
+}
 ?>
 
 <html>
@@ -147,14 +165,18 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "att_prod" && $nome != "") {
                 echo "value=\"{$marca}\"";
             }
             ?>/>
+          
           <br/>
+          
           Sabor:
           <input type="text" name="sabor" <?php
             if (isset($sabor) && $sabor != null || $sabor != "") {
                 echo "value=\"{$sabor}\"";
             }
             ?>/>
+          
           <br/>
+
           Legenda:
           <input type="text" name="legenda" <?php
             if (isset($legenda) && $legenda != null || $legenda != "") {
@@ -184,7 +206,7 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "att_prod" && $nome != "") {
          
          while ($var_linha = $comando1->fetch()) {
             
-            echo "<form action=\"?act=att_prod\" method=\"POST\">
+            echo "<form action=\"?act=att_prod\" method=\"POST\" style=\"display: inline;\">
                    <input type=\"hidden\" name=\"id\" value=\"" . $var_linha['id'] . "\" />
                    Nome: <input type=\"text\" name=\"nome\" value=\"" . $var_linha['nome'] . "\" /><br/>
                    Tipo: <input type=\"text\" name=\"tipo\" value=\"" . $var_linha['tipo'] . "\" /><br/>
@@ -193,8 +215,13 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "att_prod" && $nome != "") {
                    Legenda: <input type=\"text\" name=\"legenda\" value=\"" . $var_linha['legenda'] . "\" /><br/>
                    Quantidade: <input type=\"text\" name=\"quantidade\" value=\"" . $var_linha['quantidade'] . "\" /><br/>
                    Preço: <input type=\"text\" name=\"preço\" value=\"" . $var_linha['preço'] . "\" /><br/>
-                   <input type=\"submit\" value=\"Atualizar\" />
-                   </form><hr/>";
+                   <input type=\"submit\" value=\"Atualizar\" onclick=\"return confirm('Atualizar este produto?');\"/>
+                   </form>
+                   <form action=\"?act=del_prod\" method=\"POST\" style=\"display: inline;\">
+                    <input type=\"hidden\" name=\"id\" value=\"" . $var_linha['id'] . "\" />
+                    <input type=\"submit\" value=\"Deletar\" onclick=\"return confirm('Deletar este produto?');\"/>
+                    </form>
+                    <hr/>";
         }
         ?>
          

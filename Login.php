@@ -25,9 +25,9 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "save" && $nome != "") {
         $stmt->execute();
          
         if ($stmt->rowCount() > 0) {
-           
+            session_start(); 
             $_SESSION['usuario'] = $nome;
-            header("Location: pagina_protegida.php");
+            header("Location: crud_prod.php");
             exit();
         } else {
             
