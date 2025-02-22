@@ -1,0 +1,22 @@
+*{
+    font-family: "Raleway", serif;
+    font-optical-sizing: auto;
+    font-weight: weight;
+    font-style: normal;
+    background-color: rgb(195, 217, 239);
+    font-size:xx-large;
+}
+
+input{
+    margin-bottom: 60px;
+    margin-left: 10px;
+    background-color: rgb(255, 255, 255);
+}
+
+.entrar{
+    background-color: blue;
+    outline: none;
+    color: white;
+    text-align: center;
+}
+

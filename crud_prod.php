@@ -1,26 +1,16 @@
 <?php
-// na outra pg
-if o login funcionou {
-    $_SESSION["username"] = pessoa do banco de dados q vc puxou
-}
-
 // session_start();
 //nessa pg
-if (!isset($_SESSION["username"])) {
-    exit();
-} else {
-
-    $username = $_SESSION["username"]
-}
+//if (!isset($_SESSION["username"])) {
+//    exit();
+//} else {
+//    $username = $_SESSION["username"]
+//}
 // para deslogar unset($_SESSION["username"])
-
-
-
-
+session_start();
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $id = (isset($_POST["id"]) && $_POST["id"] != null) ? $_POST["id"] : "";
-    $usuario = (isset($_POST["usuario"]) && $_POST["usuario"] != null) ? $_POST["usuario"] : "";
     $nome = (isset($_POST["nome"]) && $_POST["nome"] != null) ? $_POST["nome"] : "";
     $tipo = (isset($_POST["tipo"]) && $_POST["tipo"] != null) ? $_POST["tipo"] : NULL;
     $marca = (isset($_POST["marca"]) && $_POST["marca"] != null) ? $_POST["marca"] : NULL;
@@ -32,7 +22,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 } else if (!isset($id)) {
 
     $id = (isset($_GET["id"]) && $_GET["id"] != null) ? $_GET["id"] : "";
-    $usuario = NULL;
     $nome = NULL;
     $tipo = NULL;
     $marca = NULL;
@@ -69,7 +58,6 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "save_prod" && $nome != "") {
             if ($stmt->rowCount() > 0) {
                 echo "Dados cadastrados com sucesso!";
                 $id = NULL;
-                $usuario = NULL;
                 $nome = NULL;
                 $tipo = NULL;
                 $marca = NULL;
@@ -104,7 +92,6 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "att_prod" && $nome != "") {
             if ($stmt->rowCount() > 0) {
                 echo "Dados cadastrados com sucesso!";
                 $id = NULL;
-                $usuario = NULL;
                 $nome = NULL;
                 $tipo = NULL;
                 $marca = NULL;
@@ -140,11 +127,6 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "att_prod" && $nome != "") {
             }
             ?>/>
 
-          <input type="hidden" name="usuario" <?php
-            if (isset($usuario) && $usuario != null || $usuario != "") {
-                echo "value=\"{$usuario}\"";
-            }
-            ?>/>
           Nome:
           <input type="text" name="nome" <?php
             if (isset($nome) && $nome != null || $nome != "") {
@@ -167,7 +149,7 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "att_prod" && $nome != "") {
             ?>/>
           <br/>
           Sabor:
-          <input type="text" name="tipo" <?php
+          <input type="text" name="sabor" <?php
             if (isset($sabor) && $sabor != null || $sabor != "") {
                 echo "value=\"{$sabor}\"";
             }
