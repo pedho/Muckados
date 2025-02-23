@@ -1,4 +1,5 @@
 CREATE TABLE Login(
+	id serial,
 	usuario varchar,
 	setor varchar,
 	senha int,

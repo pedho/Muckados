@@ -26,8 +26,8 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "save" && $nome != "") {
          
         if ($stmt->rowCount() > 0) {
             session_start(); 
-            $_SESSION['usuario'] = $nome;
-            header("Location: crud_prod.php");
+            $_SESSION['username'] = $nome;
+            header("Location: crud_vest.php");
             exit();
         } else {
             

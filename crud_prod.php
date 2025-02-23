@@ -19,6 +19,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $legenda = (isset($_POST["legenda"]) && $_POST["legenda"] != null) ? $_POST["legenda"] : "";
     $quantidade = (isset($_POST["quantidade"]) && $_POST["quantidade"] != null) ? $_POST["quantidade"] : "";
     $preço = (isset($_POST["preço"]) && $_POST["preço"] != null) ? $_POST["preço"] : NULL;
+    $nome_view = (isset($_POST["nome_view"]) && $_POST["nome_view"] != null) ? $_POST["nome_view"] : "";
+    $tipo_view = (isset($_POST["tipo_view"]) && $_POST["tipo_view"] != null) ? $_POST["tipo_view"] : NULL;
+    $marca_view = (isset($_POST["marca_view"]) && $_POST["marca_view"] != null) ? $_POST["marca_view"] : NULL;
+    $sabor_view = (isset($_POST["sabor_view"]) && $_POST["sabor_view"] != null) ? $_POST["sabor_view"] : NULL;
+    $legenda_view = (isset($_POST["legenda_view"]) && $_POST["legenda_view"] != null) ? $_POST["legenda_view"] : "";
+    $quantidade_view = (isset($_POST["quantidade_view"]) && $_POST["quantidade_view"] != null) ? $_POST["quantidade_view"] : "";
+    $preço_view = (isset($_POST["preço_view"]) && $_POST["preço_view"] != null) ? $_POST["preço_view"] : NULL;
     
 } else if (!isset($id)) {
 
@@ -30,6 +37,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $legenda = NULL;
     $quantidade = NULL;
     $preço = NULL;
+    $nome_view = NULL;
+    $tipo_view = NULL;
+    $marca_view = NULL;
+    $sabor_view = NULL;
+    $legenda_view = NULL;
+    $quantidade_view = NULL;
+    $preço_view = NULL;
     
 }
     try {
@@ -76,16 +90,16 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "save_prod" && $nome != "") {
         echo "Erro: " . $erro->getMessage();
     }
 }
-if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "att_prod" && $nome != "") {
+if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "att_prod" && $nome_view != "") {
     try {
         $stmt = $con->prepare("UPDATE Produto set nome = ?, tipo = ?, marca = ?, sabor = ?, legenda = ?, quantidade = ?, preço = ? where id = ?");
-        $stmt->bindParam(1, $nome);
-        $stmt->bindParam(2, $tipo);
-        $stmt->bindParam(3, $marca);
-        $stmt->bindParam(4, $sabor);
-        $stmt->bindParam(5, $legenda);
-        $stmt->bindParam(6, $quantidade);
-        $stmt->bindParam(7, $preço);
+        $stmt->bindParam(1, $nome_view);
+        $stmt->bindParam(2, $tipo_view);
+        $stmt->bindParam(3, $marca_view);
+        $stmt->bindParam(4, $sabor_view);
+        $stmt->bindParam(5, $legenda_view);
+        $stmt->bindParam(6, $quantidade_view);
+        $stmt->bindParam(7, $preço_view);
         $stmt->bindParam(8, $id);
 
          
@@ -93,13 +107,13 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "att_prod" && $nome != "") {
             if ($stmt->rowCount() > 0) {
                 echo "Dados cadastrados com sucesso!";
                 $id = NULL;
-                $nome = NULL;
-                $tipo = NULL;
-                $marca = NULL;
-                $sabor = NULL;
-                $legenda = NULL;
-                $quantidade = NULL;
-                $preço = NULL;
+                $nome_view = NULL;
+                $tipo_view = NULL;
+                $marca_view = NULL;
+                $sabor_view = NULL;
+                $legenda_view = NULL;
+                $quantidade_view = NULL;
+                $preço_view = NULL;
 
             } else {
                 echo "Erro ao tentar efetivar cadastro";
@@ -202,19 +216,19 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "del_prod" && isset($_POST["i
          <input type="reset" value="Novo" />
          <hr>
          <?php
-         $comando1 = $con->query("SELECT * FROM produto");
+         $comando1 = $con->query("SELECT * FROM Produto INNER JOIN Login ON Produto.usuario = Login.usuario WHERE Produto.usuario = '$username'");
          
          while ($var_linha = $comando1->fetch()) {
             
             echo "<form action=\"?act=att_prod\" method=\"POST\" style=\"display: inline;\">
                    <input type=\"hidden\" name=\"id\" value=\"" . $var_linha['id'] . "\" />
-                   Nome: <input type=\"text\" name=\"nome\" value=\"" . $var_linha['nome'] . "\" /><br/>
-                   Tipo: <input type=\"text\" name=\"tipo\" value=\"" . $var_linha['tipo'] . "\" /><br/>
-                   Marca: <input type=\"text\" name=\"marca\" value=\"" . $var_linha['marca'] . "\" /><br/>
-                   Sabor: <input type=\"text\" name=\"sabor\" value=\"" . $var_linha['sabor'] . "\" /><br/>
-                   Legenda: <input type=\"text\" name=\"legenda\" value=\"" . $var_linha['legenda'] . "\" /><br/>
-                   Quantidade: <input type=\"text\" name=\"quantidade\" value=\"" . $var_linha['quantidade'] . "\" /><br/>
-                   Preço: <input type=\"text\" name=\"preço\" value=\"" . $var_linha['preço'] . "\" /><br/>
+                   Nome: <input type=\"text\" name=\"nome_view\" value=\"" . $var_linha['nome'] . "\" /><br/>
+                   Tipo: <input type=\"text\" name=\"tipo_view\" value=\"" . $var_linha['tipo'] . "\" /><br/>
+                   Marca: <input type=\"text\" name=\"marca_view\" value=\"" . $var_linha['marca'] . "\" /><br/>
+                   Sabor: <input type=\"text\" name=\"sabor_view\" value=\"" . $var_linha['sabor'] . "\" /><br/>
+                   Legenda: <input type=\"text\" name=\"legenda_view\" value=\"" . $var_linha['legenda'] . "\" /><br/>
+                   Quantidade: <input type=\"text\" name=\"quantidade_view\" value=\"" . $var_linha['quantidade'] . "\" /><br/>
+                   Preço: <input type=\"text\" name=\"preço_view\" value=\"" . $var_linha['preço'] . "\" /><br/>
                    <input type=\"submit\" value=\"Atualizar\" onclick=\"return confirm('Atualizar este produto?');\"/>
                    </form>
                    <form action=\"?act=del_prod\" method=\"POST\" style=\"display: inline;\">
