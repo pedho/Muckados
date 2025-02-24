@@ -1,5 +1,5 @@
 CREATE TABLE Login(
-	id serial,
+	id serial UNIQUE, 
 	usuario varchar,
 	setor varchar,
 	senha int,

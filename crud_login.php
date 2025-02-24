@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $usuario = (isset($_POST["usuario"]) && $_POST["usuario"] != null) ? $_POST["usuario"] : "";
     $setor = (isset($_POST["setor"]) && $_POST["setor"] != null) ? $_POST["setor"] : NULL;
     $senha = (isset($_POST["senha"]) && $_POST["senha"] != null) ? $_POST["senha"] : "";
-    $usuario_view = (isset($_POST["usuari_view"]) && $_POST["usuario_view"] != null) ? $_POST["usuario_view"] : "";
+    $usuario_view = (isset($_POST["usuario_view"]) && $_POST["usuario_view"] != null) ? $_POST["usuario_view"] : "";
     $setor_view = (isset($_POST["setor_view"]) && $_POST["setor_view"] != null) ? $_POST["setor_view"] : NULL;
     $senha_view = (isset($_POST["senha_view"]) && $_POST["senha_view"] != null) ? $_POST["senha_view"] : "";
     
@@ -67,12 +67,12 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "att_user" && $usuario_view !
         $stmt->bindParam(3, $senha_view);
         $stmt->bindParam(4, $id);
 
-         
+
         if ($stmt->execute()) {
             if ($stmt->rowCount() > 0) {
                 echo "Dados cadastrados com sucesso!";
                 $id = NULL;
-                $usuario_view= NULL;
+                $usuario_view = NULL;
                 $setor_view = NULL;
                 $senha_view = NULL;
 
@@ -113,7 +113,7 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "del_user" && isset($_POST["i
     <body>
 
         <form action="?act=save_user" method="POST" name="form2" >
-          <h1>Adicionar vestuario</h1>
+          <h1>Adicionar usuario</h1>
           <hr>
           <input type="hidden" name="id" <?php
             if (isset($id) && $id != null || $id != "") {
@@ -145,21 +145,23 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "del_user" && isset($_POST["i
          <input type="submit" value="Salvar" />
          <input type="reset" value="Novo" />
          <hr>
+         </form>
 
          <?php
-         $comando1 = $con->query("SELECT * FROM Login");
+         $comando1 = $con->query("SELECT Login.id AS usuario_id, Login.*
+                         FROM Login");
          
          while ($var_linha = $comando1->fetch()) {
             
             echo "<form action=\"?act=att_user\" method=\"POST\" style=\"display: inline;\">
-                   <input type=\"hidden\" name=\"id\" value=\"" . $var_linha['id'] . "\" />
+                   <input type=\"hidden\" name=\"id\" value=\"" . $var_linha['usuario_id'] . "\" />
                    Usuario: <input type=\"text\" name=\"usuario_view\" value=\"" . $var_linha['usuario'] . "\" /><br/>
                    Setor: <input type=\"text\" name=\"setor_view\" value=\"" . $var_linha['setor'] . "\" /><br/>
                    Senha: <input type=\"text\" name=\"senha_view\" value=\"" . $var_linha['senha'] . "\" /><br/>
                    <input type=\"submit\" value=\"Atualizar\" onclick=\"return confirm('Atualizar este usuario?');\"/>
                    </form>
                    <form action=\"?act=del_user\" method=\"POST\" style=\"display: inline;\">
-                    <input type=\"hidden\" name=\"id\" value=\"" . $var_linha['id'] . "\" />
+                    <input type=\"hidden\" name=\"id\" value=\"" . $var_linha['usuario_id'] . "\" />
                     <input type=\"submit\" value=\"Deletar\" onclick=\"return confirm('Deletar este usuario?');\"/>
                     </form>
                     <hr/>";

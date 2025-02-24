@@ -93,6 +93,7 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "save_prod" && $nome != "") {
 if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "att_prod" && $nome_view != "") {
     try {
         $stmt = $con->prepare("UPDATE Produto set nome = ?, tipo = ?, marca = ?, sabor = ?, legenda = ?, quantidade = ?, preço = ? where id = ?");
+        echo $id;
         $stmt->bindParam(1, $nome_view);
         $stmt->bindParam(2, $tipo_view);
         $stmt->bindParam(3, $marca_view);
@@ -101,11 +102,10 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "att_prod" && $nome_view != "
         $stmt->bindParam(6, $quantidade_view);
         $stmt->bindParam(7, $preço_view);
         $stmt->bindParam(8, $id);
-
-         
+        
+        
         if ($stmt->execute()) {
             if ($stmt->rowCount() > 0) {
-                echo "Dados cadastrados com sucesso!";
                 $id = NULL;
                 $nome_view = NULL;
                 $tipo_view = NULL;
@@ -114,7 +114,7 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "att_prod" && $nome_view != "
                 $legenda_view = NULL;
                 $quantidade_view = NULL;
                 $preço_view = NULL;
-
+                
             } else {
                 echo "Erro ao tentar efetivar cadastro";
             }
@@ -215,13 +215,18 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "del_prod" && isset($_POST["i
          <input type="submit" value="Salvar" />
          <input type="reset" value="Novo" />
          <hr>
-         <?php
-         $comando1 = $con->query("SELECT * FROM Produto INNER JOIN Login ON Produto.usuario = Login.usuario WHERE Produto.usuario = '$username'");
+        </form>
+
+        <?php
+         $comando1 = $con->query("SELECT Produto.id AS produto_id, Login.id AS usuario_id, Produto.*, Login.*
+                         FROM Produto 
+                         INNER JOIN Login ON Produto.usuario = Login.usuario 
+                         WHERE Produto.usuario = '$username'");
          
          while ($var_linha = $comando1->fetch()) {
             
             echo "<form action=\"?act=att_prod\" method=\"POST\" style=\"display: inline;\">
-                   <input type=\"hidden\" name=\"id\" value=\"" . $var_linha['id'] . "\" />
+                   <input type=\"hidden\" name=\"id\" value=\"" . $var_linha['produto_id'] . "\" />
                    Nome: <input type=\"text\" name=\"nome_view\" value=\"" . $var_linha['nome'] . "\" /><br/>
                    Tipo: <input type=\"text\" name=\"tipo_view\" value=\"" . $var_linha['tipo'] . "\" /><br/>
                    Marca: <input type=\"text\" name=\"marca_view\" value=\"" . $var_linha['marca'] . "\" /><br/>
@@ -232,7 +237,7 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "del_prod" && isset($_POST["i
                    <input type=\"submit\" value=\"Atualizar\" onclick=\"return confirm('Atualizar este produto?');\"/>
                    </form>
                    <form action=\"?act=del_prod\" method=\"POST\" style=\"display: inline;\">
-                    <input type=\"hidden\" name=\"id\" value=\"" . $var_linha['id'] . "\" />
+                    <input type=\"hidden\" name=\"id\" value=\"" . $var_linha['produto_id'] . "\" />
                     <input type=\"submit\" value=\"Deletar\" onclick=\"return confirm('Deletar este produto?');\"/>
                     </form>
                     <hr/>";

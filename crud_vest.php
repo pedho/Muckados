@@ -81,7 +81,7 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "save_vest" && $tipo != "") {
         echo "Erro: " . $erro->getMessage();
     }
 }
-if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "att_vest" && $tipo_view != "") {
+if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "att_vest" && $tipo_view != "" && $id != "") {
     try {
         $stmt = $con->prepare("UPDATE Vestuario set tipo = ?, marca = ?, cor = ?, legenda = ?, quantidade = ?, preço = ? where id = ?");
         $stmt->bindParam(1, $tipo_view);
@@ -193,14 +193,18 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "del_vest" && isset($_POST["i
          <input type="submit" value="Salvar" />
          <input type="reset" value="Novo" />
          <hr>
+         </form>
 
          <?php
-         $comando1 = $con->query("SELECT * FROM Vestuario INNER JOIN Login ON Vestuario.usuario = Login.usuario WHERE Vestuario.usuario = '$username'");
+         $comando1 = $con->query("SELECT Vestuario.id AS vestuario_id, Login.id AS usuario_id, Vestuario.*, Login.*
+                         FROM Vestuario 
+                         INNER JOIN Login ON Vestuario.usuario = Login.usuario 
+                         WHERE Vestuario.usuario = '$username'");
          
          while ($var_linha = $comando1->fetch()) {
             
             echo "<form action=\"?act=att_vest\" method=\"POST\" style=\"display: inline;\">
-                   <input type=\"hidden\" name=\"id\" value=\"" . $var_linha['id'] . "\" />
+                   <input type=\"hidden\" name=\"id\" value=\"" . $var_linha['vestuario_id'] . "\" />
                    Tipo: <input type=\"text\" name=\"tipo_view\" value=\"" . $var_linha['tipo'] . "\" /><br/>
                    Marca: <input type=\"text\" name=\"marca_view\" value=\"" . $var_linha['marca'] . "\" /><br/>
                    Cor: <input type=\"text\" name=\"cor_view\" value=\"" . $var_linha['cor'] . "\" /><br/>
@@ -210,7 +214,7 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "del_vest" && isset($_POST["i
                    <input type=\"submit\" value=\"Atualizar\" onclick=\"return confirm('Atualizar esta peça??');\"/>
                    </form>
                    <form action=\"?act=del_vest\" method=\"POST\" style=\"display: inline;\">
-                    <input type=\"hidden\" name=\"id\" value=\"" . $var_linha['id'] . "\" />
+                    <input type=\"hidden\" name=\"id\" value=\"" . $var_linha['vestuario_id'] . "\" />
                     <input type=\"submit\" value=\"Deletar\" onclick=\"return confirm('Deletar esta peça?');\"/>
                     </form>
                     <hr/>";
