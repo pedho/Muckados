@@ -4,7 +4,7 @@
 // para deslogar unset($_SESSION["username"])
 session_start(); // INICIA A SESSÃO
 if (!isset($_SESSION["username"])) {
-    exit("Usuário não autenticado."); // Mensagem para debugging
+  exit("Usuário não autenticado."); // Mensagem para debugging
 } else {
     $username = $_SESSION["username"];
 }
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
 }
     try {
-        $con = new PDO('pgsql:host=localhost;port=5432;dbname=postgres', 'postgres', 'pabd');
+        $con = new PDO("pgsql:host=localhost; dbname=postgres", "postgres", "pabd");
         
         if ($con) {
             echo "deu certo";
@@ -93,7 +93,7 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "save_prod" && $nome != "") {
 if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "att_prod" && $nome_view != "") {
     try {
         $stmt = $con->prepare("UPDATE Produto set nome = ?, tipo = ?, marca = ?, sabor = ?, legenda = ?, quantidade = ?, preço = ? where id = ?");
-        echo $id;
+        
         $stmt->bindParam(1, $nome_view);
         $stmt->bindParam(2, $tipo_view);
         $stmt->bindParam(3, $marca_view);
@@ -148,6 +148,7 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "del_prod" && isset($_POST["i
     <head>
         <meta charset="UTF-8">
         <title>Muckados</title>
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
         <form action="?act=save_prod" method="POST" name="form1">

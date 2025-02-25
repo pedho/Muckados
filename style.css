@@ -20,3 +20,27 @@ input{
     text-align: center;
 }
 
+.logo {
+    width: 250px; /* Ajuste o tamanho conforme necessário */
+    height: auto; /* Mantém a proporção da imagem */
+    margin-top: -70px; /* Move a imagem mais para cima */
+    display: block; /* Garante um bom alinhamento */
+}
+
+div,a{
+    margin-left: 40px;
+    font-size: 25px; /* Diminui o tamanho da fonte */
+    text-decoration: none; /* Remove o sublinhado */
+    color: black; /* Mantém a cor preta */
+}
+
+a:hover {
+    color: #007bff; /* Muda a cor ao passar o mouse */
+}
+
+.parabens{
+        text-align: center; /* Centraliza o texto horizontalmente */
+        display: flex;
+        justify-content: center; /* Alinha no centro horizontal */
+        align-items: center; /* Alinha no centro vertical */
+}

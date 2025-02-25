@@ -2,9 +2,9 @@
 
 session_start();
 if (!isset($_SESSION["username"])) {
-    exit("Usuário não autenticado.");
+  exit("Usuário não autenticado.");
 } else {
-    $username = $_SESSION["username"];
+  $username = $_SESSION["username"];
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $preço_view = NULL;
 }
 try {
-	$con = new PDO('pgsql:host=localhost;port=5432;dbname=postgres', 'postgres', 'pabd');
+	$con = new PDO("pgsql:host=localhost; dbname=postgres", "postgres", "pabd");
 	
 	if ($con) {
 		echo "deu certo";
@@ -137,6 +137,7 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "del_vest" && isset($_POST["i
     <head>
         <meta charset="UTF-8">
         <title>Muckados</title>
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
 
