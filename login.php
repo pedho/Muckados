@@ -14,6 +14,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 try {
     $con = new PDO("pgsql:host=localhost; dbname=postgres", "postgres", "pabd");
+    if ($con) {
+        $stmt = $con->prepare("SELECT * FROM login WHERE usuario = 'ADM' AND senha = 111");
+        $stmt->execute();
+
+        if ($stmt->rowCount() < 1) {
+            $stmt = $con->prepare("INSERT INTO Login (usuario, senha) values ('ADM', 111)");
+            $stmt->execute();
+        } else {
+            
+        }
+	}
 } catch (PDOException $erro) {
     echo "Erro na conexão:" . $erro->getMessage();
 }
