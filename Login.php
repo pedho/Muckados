@@ -1,5 +1,6 @@
 <?php
 
+// Verificar se foi enviando dados via POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nome = (isset($_POST["nome"]) && $_POST["nome"] != null) ? $_POST["nome"] : "";
     $senha = (isset($_POST["senha"]) && $_POST["senha"] != null) ? $_POST["senha"] : "";
@@ -12,25 +13,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 try {
-    $conexao = new PDO('pgsql:host=127.0.0.1;port=5432;dbname=postgres', 'postgres', 'pabd');
+    $con = new PDO("pgsql:host=localhost; dbname=postgres", "postgres", "pabd");
+    if ($con) {
+        $stmt = $con->prepare("SELECT * FROM login WHERE usuario = 'ADM' AND senha = 111");
+        $stmt->execute();
+
+        if ($stmt->rowCount() < 1) {
+            $stmt = $con->prepare("INSERT INTO Login (usuario, senha) values ('ADM', 111)");
+            $stmt->execute();
+        } else {
+            
+        }
+	}
 } catch (PDOException $erro) {
     echo "Erro na conexão:" . $erro->getMessage();
 }
 
 if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "save" && $nome != "") {
     try {
-        $stmt = $conexao->prepare("SELECT * FROM login WHERE usuario = :nome AND senha = :senha");
+        $stmt = $con->prepare("SELECT * FROM login WHERE usuario = :nome AND senha = :senha");
         $stmt->bindParam(":nome", $nome);
         $stmt->bindParam(":senha", $senha);
         $stmt->execute();
          
+        // Verifica se encontrou um usuário com as credenciais fornecidas
         if ($stmt->rowCount() > 0) {
-            session_start(); 
+            session_start();
             $_SESSION['username'] = $nome;
-            header("Location: crud_login.php");
+            header("Location: pagina_protegida.php"); // Redireciona para a página desejada
             exit();
         } else {
-            
+            // Credenciais inválidas
             $erro = "Usuário ou senha incorretos.";
         }
     } catch (PDOException $erro) {
@@ -45,9 +58,6 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "save" && $nome != "") {
         <meta charset="UTF-8">
         <title>Mukados</title>
         <link rel="stylesheet" href="style.css">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     </head>
     <body>
         <form style="width: 40%;margin:auto;margin-top:10%" action="?act=save" method="POST" name="form1" >
@@ -66,6 +76,6 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "save" && $nome != "") {
             }
           ?>
          <input class="entrar" type="submit" value="entrar" />
-        </form>
+       </form>
     </body>
 </html>
