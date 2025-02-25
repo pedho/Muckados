@@ -8,10 +8,12 @@
 </head>
 <body>
     <div style="display: flex; margin-left:50px;">
-        <div style="display: flex;">
-            <img class="logo" src="muckados.png" alt="">
-            <p>Muckados</p>
-        </div>
+        <a href="pagina_protegida.php">
+            <div style="display: flex;">
+                <img class="logo" src="muckados.png" alt="">
+                <p>Muckados</p>
+            </div>
+        </a>
         <div style="margin-left:200px;margin-top:40px;">
             <a href="crud_vest.php">VESTUÁRIO</a>
             <a href="crud_prod.php">SUPLEMENTOS</a>

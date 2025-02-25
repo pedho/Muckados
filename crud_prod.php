@@ -50,7 +50,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $con = new PDO("pgsql:host=localhost; dbname=postgres", "postgres", "pabd");
         
         if ($con) {
-            echo "deu certo";
+            echo "<div style=\"display: flex; margin-left:50px;\">
+                    <a href=\"pagina_protegida.php\">
+                        <div style=\"display: flex;\">
+                            <img class=\"logo\" src=\"muckados.png\" alt=\"\">
+                            <p>Muckados</p>
+                        </div>
+                    </a>
+                    <div style=\"margin-left:200px;margin-top:40px;\">
+                        <a href=\"crud_vest.php\">VESTUÁRIO</a>
+                        <a href=\"crud_prod.php\">SUPLEMENTOS</a>
+                        <a href=\"crud_login.php\">GERENCIAMENTO</a>
+                    </div>
+                 </div>";
             
         }
     } catch (PDOException $e) {
